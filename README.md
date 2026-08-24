@@ -1,9 +1,9 @@
-# troll-virus<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>System Security Scan</title>
+<title>Security Center</title>
 
 <style>
 * {
@@ -12,7 +12,7 @@
 
 body {
     margin: 0;
-    background: #050505;
+    background: #030303;
     color: #00ff66;
     font-family: Consolas, "Courier New", monospace;
     overflow: hidden;
@@ -30,8 +30,8 @@ body {
 }
 
 .header h1 {
-    margin: 0;
-    font-size: 24px;
+    margin: 0 0 7px;
+    font-size: 25px;
 }
 
 .small {
@@ -50,7 +50,7 @@ body {
     width: 0%;
     height: 100%;
     background: #00ff66;
-    box-shadow: 0 0 12px #00ff66;
+    box-shadow: 0 0 15px #00ff66;
     transition: width .25s;
 }
 
@@ -60,7 +60,7 @@ body {
 
 .stats {
     display: flex;
-    gap: 30px;
+    gap: 15px;
     flex-wrap: wrap;
     margin: 20px 0;
 }
@@ -75,16 +75,16 @@ body {
 .stat span {
     display: block;
     color: white;
-    font-size: 22px;
+    font-size: 21px;
     margin-top: 5px;
 }
 
 #log {
-    height: 45vh;
+    height: 48vh;
     overflow: hidden;
     border: 1px solid #222;
     padding: 15px;
-    background: #020202;
+    background: #010101;
 }
 
 .line {
@@ -100,15 +100,15 @@ body {
 }
 
 .danger {
-    color: #ff3030;
+    color: #ff2020;
 }
 
-#dangerScreen {
+#dangerScreen,
+#jumpscare,
+#troll {
     display: none;
     position: fixed;
     inset: 0;
-    background: #050000;
-    color: red;
     z-index: 20;
     justify-content: center;
     align-items: center;
@@ -116,10 +116,14 @@ body {
     text-align: center;
 }
 
+#dangerScreen {
+    background: #080000;
+    color: red;
+}
+
 #dangerScreen h1 {
     font-size: clamp(40px, 8vw, 90px);
-    margin: 0;
-    animation: shake .15s infinite;
+    animation: shake .12s infinite;
 }
 
 #dangerScreen p {
@@ -129,46 +133,56 @@ body {
 button {
     padding: 15px 30px;
     border: 0;
-    background: red;
+    background: #d00000;
     color: white;
     font-size: 18px;
     cursor: pointer;
+    font-family: Arial, sans-serif;
 }
 
 #jumpscare {
-    display: none;
-    position: fixed;
-    inset: 0;
     background: #000;
     z-index: 50;
-    color: white;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;
 }
 
-.face {
-    font-size: min(35vw, 280px);
-    animation: pulse .5s infinite alternate;
+.scaryFace {
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 35% 38%, white 0 10%, black 11% 16%, transparent 17%),
+        radial-gradient(circle at 65% 38%, white 0 10%, black 11% 16%, transparent 17%),
+        radial-gradient(ellipse at 50% 70%, black 0 24%, transparent 25%),
+        #d7d0c0;
+    box-shadow: 0 0 60px red;
+    animation: zoom .35s infinite alternate;
+    position: relative;
+}
+
+.scaryFace::before {
+    content: "";
+    position: absolute;
+    inset: 20px;
+    border-radius: 50%;
+    border: 7px solid #500;
 }
 
 #jumpscare h1 {
+    color: red;
     font-size: clamp(35px, 7vw, 80px);
-    margin: 10px;
+    margin: 15px;
+    animation: shake .1s infinite;
+}
+
+#jumpscare p {
+    color: white;
+    font-size: 20px;
 }
 
 #troll {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: #000;
     z-index: 100;
+    background: black;
     color: white;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;
     font-family: Arial, sans-serif;
 }
 
@@ -179,17 +193,28 @@ button {
 
 #troll p {
     font-size: 25px;
+    line-height: 1.5;
 }
 
 @keyframes shake {
-    0% { transform: translate(2px, 1px); }
-    50% { transform: translate(-3px, -2px); }
-    100% { transform: translate(2px, -1px); }
+    0% {
+        transform: translate(3px, 1px);
+    }
+    50% {
+        transform: translate(-4px, -2px);
+    }
+    100% {
+        transform: translate(2px, 3px);
+    }
 }
 
-@keyframes pulse {
-    from { transform: scale(1); }
-    to { transform: scale(1.08); }
+@keyframes zoom {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.15);
+    }
 }
 </style>
 </head>
@@ -200,6 +225,7 @@ button {
 
     <div class="header">
         <h1>🛡 SYSTEM SECURITY CENTER</h1>
+
         <div class="small">
             Advanced Threat Detection Engine v4.7.2
         </div>
@@ -248,12 +274,14 @@ button {
 
     <h1>⚠ MENACE CRITIQUE ⚠</h1>
 
-    <p id="dangerText">
+    <p>
         Une anomalie grave a été détectée.
     </p>
 
     <p>
-        Intervention automatique dans <b id="countdown">10</b> secondes...
+        Intervention automatique dans
+        <b id="countdown">10</b>
+        secondes...
     </p>
 
     <button onclick="startEnding()">
@@ -263,15 +291,15 @@ button {
 </div>
 
 
-<audio id="scarySound" src="jusatti890-scream-horror-sfx-490899.mp3" preload="auto"></audio>
-
 <div id="jumpscare">
 
-    <img src="horreur.jpg.jpg" alt="">
+    <div class="scaryFace"></div>
 
     <h1>ACCÈS COMPROMIS</h1>
 
-    <p>Analyse de sécurité terminée.</p>
+    <p>
+        Analyse de sécurité terminée.
+    </p>
 
 </div>
 
@@ -282,7 +310,7 @@ button {
 
     <p>
         Aucun virus n'a été installé.<br>
-        Ton ordinateur n'a rien du tout 😎
+        Ton ordinateur va parfaitement bien 😎
     </p>
 
     <button onclick="location.reload()">
@@ -317,7 +345,6 @@ const fakeFiles = [
     "C:/Windows/Temp/system_cache.tmp",
     "C:/Program Files/Common/system.dll",
     "C:/System/Logs/security.log",
-    "C:/Users/Public/Documents/data.tmp",
     "C:/Windows/System32/config.dat",
     "C:/ProgramData/Services/service.tmp"
 ];
@@ -330,7 +357,9 @@ const messages = [
     "Recherche de comportements suspects...",
     "Vérification des connexions locales...",
     "Analyse heuristique...",
-    "Vérification de l'intégrité du système..."
+    "Vérification de l'intégrité du système...",
+    "Analyse des signatures numériques...",
+    "Vérification des modules système..."
 ];
 
 function addLog(text, type = "good") {
@@ -338,28 +367,30 @@ function addLog(text, type = "good") {
     const line = document.createElement("div");
 
     line.className = "line " + type;
-
     line.textContent = "> " + text;
 
     log.appendChild(line);
 
-    while (log.children.length > 16) {
+    while (log.children.length > 17) {
         log.removeChild(log.firstChild);
     }
 }
 
 function randomFile() {
+
     return fakeFiles[
         Math.floor(Math.random() * fakeFiles.length)
     ];
 }
 
+
 const scan = setInterval(() => {
 
     progress += Math.floor(Math.random() * 4) + 2;
 
-    if (progress > 100)
+    if (progress > 100) {
         progress = 100;
+    }
 
     progressBar.style.width = progress + "%";
     percent.textContent = progress + "%";
@@ -371,16 +402,15 @@ const scan = setInterval(() => {
     processes.textContent = processCount;
 
     addLog(
-        messages[Math.floor(Math.random() * messages.length)]
+        messages[
+            Math.floor(Math.random() * messages.length)
+        ]
     );
 
     addLog(
         "Analyse : " + randomFile()
     );
 
-    /*
-       Fausses détections uniquement visuelles.
-    */
 
     if (progress > 35 && threatCount === 0) {
 
@@ -396,6 +426,7 @@ const scan = setInterval(() => {
         level.textContent = "ATTENTION";
     }
 
+
     if (progress > 55 && threatCount === 1) {
 
         threatCount = 3;
@@ -409,6 +440,7 @@ const scan = setInterval(() => {
 
         level.textContent = "ÉLEVÉ";
     }
+
 
     if (progress > 72 && threatCount === 3) {
 
@@ -424,14 +456,15 @@ const scan = setInterval(() => {
         level.textContent = "CRITIQUE";
     }
 
+
     if (progress > 88) {
 
         addLog(
             "Analyse mémoire approfondie...",
             "warning"
         );
-
     }
+
 
     if (progress >= 100) {
 
@@ -481,13 +514,66 @@ function startCountdown() {
 }
 
 
+function scarySound() {
+
+    const AudioContext =
+        window.AudioContext ||
+        window.webkitAudioContext;
+
+    if (!AudioContext) return;
+
+    const audio = new AudioContext();
+
+    const oscillator = audio.createOscillator();
+    const gain = audio.createGain();
+
+    oscillator.type = "sawtooth";
+
+    oscillator.frequency.setValueAtTime(
+        900,
+        audio.currentTime
+    );
+
+    oscillator.frequency.exponentialRampToValueAtTime(
+        80,
+        audio.currentTime + 1.2
+    );
+
+    gain.gain.setValueAtTime(
+        0.001,
+        audio.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        0.4,
+        audio.currentTime + 0.05
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        0.001,
+        audio.currentTime + 1.3
+    );
+
+    oscillator.connect(gain);
+    gain.connect(audio.destination);
+
+    oscillator.start();
+
+    oscillator.stop(
+        audio.currentTime + 1.3
+    );
+}
+
+
 function startEnding() {
-document.getElementById("scarySound").play();
+
     document.getElementById("dangerScreen")
         .style.display = "none";
 
     document.getElementById("jumpscare")
         .style.display = "flex";
+
+    scarySound();
 
     setTimeout(() => {
 
