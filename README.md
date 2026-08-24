@@ -6,215 +6,187 @@
 <title>Security Center</title>
 
 <style>
-* {
-    box-sizing: border-box;
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    background:#030303;
+    color:#00ff66;
+    font-family:Consolas,"Courier New",monospace;
+    overflow:hidden
 }
 
-body {
-    margin: 0;
-    background: #030303;
-    color: #00ff66;
-    font-family: Consolas, "Courier New", monospace;
-    overflow: hidden;
+#scanScreen{
+    min-height:100vh;
+    padding:25px
 }
 
-#scanScreen {
-    min-height: 100vh;
-    padding: 25px;
+.header{
+    border-bottom:1px solid #00ff66;
+    padding-bottom:15px;
+    margin-bottom:20px
 }
 
-.header {
-    border-bottom: 1px solid #00ff66;
-    padding-bottom: 15px;
-    margin-bottom: 20px;
+.header h1{
+    margin:0 0 7px;
+    font-size:25px
 }
 
-.header h1 {
-    margin: 0 0 7px;
-    font-size: 25px;
+.small{
+    color:#777;
+    font-size:13px
 }
 
-.small {
-    color: #777;
-    font-size: 13px;
+.progressBox{
+    width:100%;
+    height:28px;
+    border:1px solid #00ff66;
+    margin:20px 0 10px
 }
 
-.progressBox {
-    width: 100%;
-    height: 28px;
-    border: 1px solid #00ff66;
-    margin: 20px 0 10px;
+#progress{
+    width:0%;
+    height:100%;
+    background:#00ff66;
+    box-shadow:0 0 15px #00ff66;
+    transition:width .25s
 }
 
-#progress {
-    width: 0%;
-    height: 100%;
-    background: #00ff66;
-    box-shadow: 0 0 15px #00ff66;
-    transition: width .25s;
+#percent{
+    font-size:20px
 }
 
-#percent {
-    font-size: 20px;
+.stats{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    margin:20px 0
 }
 
-.stats {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    margin: 20px 0;
+.stat{
+    border:1px solid #222;
+    padding:12px 18px;
+    min-width:150px;
+    background:#080808
 }
 
-.stat {
-    border: 1px solid #222;
-    padding: 12px 18px;
-    min-width: 150px;
-    background: #080808;
+.stat span{
+    display:block;
+    color:white;
+    font-size:21px;
+    margin-top:5px
 }
 
-.stat span {
-    display: block;
-    color: white;
-    font-size: 21px;
-    margin-top: 5px;
+#log{
+    height:48vh;
+    overflow:hidden;
+    border:1px solid #222;
+    padding:15px;
+    background:#010101
 }
 
-#log {
-    height: 48vh;
-    overflow: hidden;
-    border: 1px solid #222;
-    padding: 15px;
-    background: #010101;
+.line{
+    margin:5px 0
 }
 
-.line {
-    margin: 5px 0;
-}
-
-.good {
-    color: #00ff66;
-}
-
-.warning {
-    color: #ffd000;
-}
-
-.danger {
-    color: #ff2020;
-}
+.good{color:#00ff66}
+.warning{color:#ffd000}
+.danger{color:#ff2020}
 
 #dangerScreen,
 #jumpscare,
-#troll {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 20;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;
+#troll{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:20;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    text-align:center
 }
 
-#dangerScreen {
-    background: #080000;
-    color: red;
+#dangerScreen{
+    background:#080000;
+    color:red
 }
 
-#dangerScreen h1 {
-    font-size: clamp(40px, 8vw, 90px);
-    animation: shake .12s infinite;
+#dangerScreen h1{
+    font-size:clamp(40px,8vw,90px);
+    animation:shake .12s infinite
 }
 
-#dangerScreen p {
-    font-size: 22px;
+#dangerScreen p{
+    font-size:22px
 }
 
-button {
-    padding: 15px 30px;
-    border: 0;
-    background: #d00000;
-    color: white;
-    font-size: 18px;
-    cursor: pointer;
-    font-family: Arial, sans-serif;
+button{
+    padding:15px 30px;
+    border:0;
+    background:#d00000;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+    font-family:Arial,sans-serif
 }
 
-#jumpscare {
-    background: #000;
-    z-index: 50;
+#jumpscare{
+    background:#000;
+    z-index:50
 }
 
-.scaryFace {
-    width: 260px;
-    height: 260px;
-    border-radius: 50%;
+.scaryFace{
+    width:260px;
+    height:260px;
+    border-radius:50%;
     background:
-        radial-gradient(circle at 35% 38%, white 0 10%, black 11% 16%, transparent 17%),
-        radial-gradient(circle at 65% 38%, white 0 10%, black 11% 16%, transparent 17%),
-        radial-gradient(ellipse at 50% 70%, black 0 24%, transparent 25%),
+        radial-gradient(circle at 35% 38%,white 0 10%,black 11% 16%,transparent 17%),
+        radial-gradient(circle at 65% 38%,white 0 10%,black 11% 16%,transparent 17%),
+        radial-gradient(ellipse at 50% 70%,black 0 24%,transparent 25%),
         #d7d0c0;
-    box-shadow: 0 0 60px red;
-    animation: zoom .35s infinite alternate;
-    position: relative;
+    box-shadow:0 0 60px red;
+    animation:zoom .35s infinite alternate
 }
 
-.scaryFace::before {
-    content: "";
-    position: absolute;
-    inset: 20px;
-    border-radius: 50%;
-    border: 7px solid #500;
+#jumpscare h1{
+    color:red;
+    font-size:clamp(35px,7vw,80px);
+    margin:15px;
+    animation:shake .1s infinite
 }
 
-#jumpscare h1 {
-    color: red;
-    font-size: clamp(35px, 7vw, 80px);
-    margin: 15px;
-    animation: shake .1s infinite;
+#jumpscare p{
+    color:white;
+    font-size:20px
 }
 
-#jumpscare p {
-    color: white;
-    font-size: 20px;
+#troll{
+    z-index:100;
+    background:#000;
+    color:white;
+    font-family:Arial,sans-serif
 }
 
-#troll {
-    z-index: 100;
-    background: black;
-    color: white;
-    font-family: Arial, sans-serif;
+#troll h1{
+    font-size:clamp(40px,8vw,100px);
+    margin:0;
+    animation:shake .15s infinite
 }
 
-#troll h1 {
-    font-size: clamp(45px, 9vw, 110px);
-    margin: 0;
+#troll p{
+    font-size:25px;
+    line-height:1.5
 }
 
-#troll p {
-    font-size: 25px;
-    line-height: 1.5;
+@keyframes shake{
+    0%{transform:translate(3px,1px)}
+    50%{transform:translate(-4px,-2px)}
+    100%{transform:translate(2px,3px)}
 }
 
-@keyframes shake {
-    0% {
-        transform: translate(3px, 1px);
-    }
-    50% {
-        transform: translate(-4px, -2px);
-    }
-    100% {
-        transform: translate(2px, 3px);
-    }
-}
-
-@keyframes zoom {
-    from {
-        transform: scale(1);
-    }
-    to {
-        transform: scale(1.15);
-    }
+@keyframes zoom{
+    from{transform:scale(1)}
+    to{transform:scale(1.15)}
 }
 </style>
 </head>
@@ -225,15 +197,12 @@ button {
 
     <div class="header">
         <h1>🛡 SYSTEM SECURITY CENTER</h1>
-
         <div class="small">
             Advanced Threat Detection Engine v4.7.2
         </div>
     </div>
 
-    <div>
-        Analyse approfondie du système...
-    </div>
+    <div>Analyse approfondie du système...</div>
 
     <div class="progressBox">
         <div id="progress"></div>
@@ -274,9 +243,7 @@ button {
 
     <h1>⚠ MENACE CRITIQUE ⚠</h1>
 
-    <p>
-        Une anomalie grave a été détectée.
-    </p>
+    <p>Une anomalie grave a été détectée.</p>
 
     <p>
         Intervention automatique dans
@@ -297,20 +264,18 @@ button {
 
     <h1>ACCÈS COMPROMIS</h1>
 
-    <p>
-        Analyse de sécurité terminée.
-    </p>
+    <p>Analyse de sécurité terminée.</p>
 
 </div>
 
 
 <div id="troll">
 
-    <h1>😂 T'AS ÉTÉ TROLLÉ 😂</h1>
+    <h1>😂 TU T'ES FAIT TROLLER 😂</h1>
 
     <p>
-        Aucun virus n'a été installé.<br>
-        Ton ordinateur va parfaitement bien 😎
+        GROS IDIOT 😭💀<br>
+        Aucun virus n'a été installé, ton PC va parfaitement bien 😎
     </p>
 
     <button onclick="location.reload()">
@@ -322,212 +287,184 @@ button {
 
 <script>
 
-const progressBar = document.getElementById("progress");
-const percent = document.getElementById("percent");
-const files = document.getElementById("files");
-const processes = document.getElementById("processes");
-const threats = document.getElementById("threats");
-const level = document.getElementById("level");
-const log = document.getElementById("log");
+const progressBar=document.getElementById("progress");
+const percent=document.getElementById("percent");
+const files=document.getElementById("files");
+const processes=document.getElementById("processes");
+const threats=document.getElementById("threats");
+const level=document.getElementById("level");
+const log=document.getElementById("log");
 
-let progress = 0;
-let fileCount = 0;
-let processCount = 0;
-let threatCount = 0;
+let progress=0;
+let fileCount=0;
+let processCount=0;
+let threatCount=0;
 
-const fakeFiles = [
-    "C:/System/Core/kernel.dat",
-    "C:/Windows/System32/security.dll",
-    "C:/Users/Public/Cache/index.tmp",
-    "C:/ProgramData/System/update.dat",
-    "C:/System/Drivers/network.sys",
-    "C:/Users/Public/AppData/cache.bin",
-    "C:/Windows/Temp/system_cache.tmp",
-    "C:/Program Files/Common/system.dll",
-    "C:/System/Logs/security.log",
-    "C:/Windows/System32/config.dat",
-    "C:/ProgramData/Services/service.tmp"
+const fakeFiles=[
+"C:/System/Core/kernel.dat",
+"C:/Windows/System32/security.dll",
+"C:/Users/Public/Cache/index.tmp",
+"C:/ProgramData/System/update.dat",
+"C:/System/Drivers/network.sys",
+"C:/Users/Public/AppData/cache.bin",
+"C:/Windows/Temp/system_cache.tmp",
+"C:/Program Files/Common/system.dll",
+"C:/System/Logs/security.log",
+"C:/Windows/System32/config.dat"
 ];
 
-const messages = [
-    "Initialisation du moteur d'analyse...",
-    "Vérification des fichiers système...",
-    "Analyse des processus actifs...",
-    "Analyse des fichiers temporaires...",
-    "Recherche de comportements suspects...",
-    "Vérification des connexions locales...",
-    "Analyse heuristique...",
-    "Vérification de l'intégrité du système...",
-    "Analyse des signatures numériques...",
-    "Vérification des modules système..."
+const messages=[
+"Initialisation du moteur d'analyse...",
+"Vérification des fichiers système...",
+"Analyse des processus actifs...",
+"Analyse des fichiers temporaires...",
+"Recherche de comportements suspects...",
+"Vérification des connexions locales...",
+"Analyse heuristique...",
+"Vérification de l'intégrité du système...",
+"Analyse des signatures numériques..."
 ];
 
-function addLog(text, type = "good") {
+function addLog(text,type="good"){
 
-    const line = document.createElement("div");
+    const line=document.createElement("div");
 
-    line.className = "line " + type;
-    line.textContent = "> " + text;
+    line.className="line "+type;
+    line.textContent="> "+text;
 
     log.appendChild(line);
 
-    while (log.children.length > 17) {
+    while(log.children.length>17){
         log.removeChild(log.firstChild);
     }
 }
 
-function randomFile() {
+function randomFile(){
 
     return fakeFiles[
-        Math.floor(Math.random() * fakeFiles.length)
+        Math.floor(Math.random()*fakeFiles.length)
     ];
 }
 
+const scan=setInterval(()=>{
 
-const scan = setInterval(() => {
+    progress+=Math.floor(Math.random()*4)+2;
 
-    progress += Math.floor(Math.random() * 4) + 2;
+    if(progress>100) progress=100;
 
-    if (progress > 100) {
-        progress = 100;
-    }
+    progressBar.style.width=progress+"%";
+    percent.textContent=progress+"%";
 
-    progressBar.style.width = progress + "%";
-    percent.textContent = progress + "%";
+    fileCount+=Math.floor(Math.random()*450)+150;
+    processCount+=Math.floor(Math.random()*4)+1;
 
-    fileCount += Math.floor(Math.random() * 450) + 150;
-    processCount += Math.floor(Math.random() * 4) + 1;
-
-    files.textContent = fileCount.toLocaleString();
-    processes.textContent = processCount;
+    files.textContent=fileCount.toLocaleString();
+    processes.textContent=processCount;
 
     addLog(
-        messages[
-            Math.floor(Math.random() * messages.length)
-        ]
+        messages[Math.floor(Math.random()*messages.length)]
     );
 
-    addLog(
-        "Analyse : " + randomFile()
-    );
+    addLog("Analyse : "+randomFile());
 
+    if(progress>35 && threatCount===0){
 
-    if (progress > 35 && threatCount === 0) {
-
-        threatCount = 1;
-
-        threats.textContent = threatCount;
+        threatCount=1;
+        threats.textContent=threatCount;
 
         addLog(
             "Anomalie comportementale détectée",
             "warning"
         );
 
-        level.textContent = "ATTENTION";
+        level.textContent="ATTENTION";
     }
 
+    if(progress>55 && threatCount===1){
 
-    if (progress > 55 && threatCount === 1) {
-
-        threatCount = 3;
-
-        threats.textContent = threatCount;
+        threatCount=3;
+        threats.textContent=threatCount;
 
         addLog(
             "Signature inconnue détectée",
             "warning"
         );
 
-        level.textContent = "ÉLEVÉ";
+        level.textContent="ÉLEVÉ";
     }
 
+    if(progress>72 && threatCount===3){
 
-    if (progress > 72 && threatCount === 3) {
-
-        threatCount = 7;
-
-        threats.textContent = threatCount;
+        threatCount=7;
+        threats.textContent=threatCount;
 
         addLog(
             "⚠ Plusieurs anomalies critiques",
             "danger"
         );
 
-        level.textContent = "CRITIQUE";
+        level.textContent="CRITIQUE";
     }
 
-
-    if (progress > 88) {
-
-        addLog(
-            "Analyse mémoire approfondie...",
-            "warning"
-        );
-    }
-
-
-    if (progress >= 100) {
+    if(progress>=100){
 
         clearInterval(scan);
 
-        threats.textContent = "13";
+        threats.textContent="13";
 
         addLog(
             "⚠ 13 MENACES CRITIQUES DÉTECTÉES",
             "danger"
         );
 
-        setTimeout(() => {
+        setTimeout(()=>{
 
             document.getElementById("dangerScreen")
-                .style.display = "flex";
+            .style.display="flex";
 
             startCountdown();
 
-        }, 1500);
+        },1500);
     }
 
-}, 500);
+},500);
 
 
-function startCountdown() {
+function startCountdown(){
 
-    let seconds = 10;
+    let seconds=10;
 
-    const counter =
-        document.getElementById("countdown");
+    const counter=document.getElementById("countdown");
 
-    const timer = setInterval(() => {
+    const timer=setInterval(()=>{
 
         seconds--;
+        counter.textContent=seconds;
 
-        counter.textContent = seconds;
-
-        if (seconds <= 0) {
+        if(seconds<=0){
 
             clearInterval(timer);
-
             startEnding();
         }
 
-    }, 1000);
+    },1000);
 }
 
 
-function scarySound() {
+function scarySound(){
 
-    const AudioContext =
+    const AudioContext=
         window.AudioContext ||
         window.webkitAudioContext;
 
-    if (!AudioContext) return;
+    if(!AudioContext) return;
 
-    const audio = new AudioContext();
+    const audio=new AudioContext();
 
-    const oscillator = audio.createOscillator();
-    const gain = audio.createGain();
+    const oscillator=audio.createOscillator();
+    const gain=audio.createGain();
 
-    oscillator.type = "sawtooth";
+    oscillator.type="sawtooth";
 
     oscillator.frequency.setValueAtTime(
         900,
@@ -536,7 +473,7 @@ function scarySound() {
 
     oscillator.frequency.exponentialRampToValueAtTime(
         80,
-        audio.currentTime + 1.2
+        audio.currentTime+1.2
     );
 
     gain.gain.setValueAtTime(
@@ -546,44 +483,41 @@ function scarySound() {
 
     gain.gain.exponentialRampToValueAtTime(
         0.4,
-        audio.currentTime + 0.05
+        audio.currentTime+0.05
     );
 
     gain.gain.exponentialRampToValueAtTime(
         0.001,
-        audio.currentTime + 1.3
+        audio.currentTime+1.3
     );
 
     oscillator.connect(gain);
     gain.connect(audio.destination);
 
     oscillator.start();
-
-    oscillator.stop(
-        audio.currentTime + 1.3
-    );
+    oscillator.stop(audio.currentTime+1.3);
 }
 
 
-function startEnding() {
+function startEnding(){
 
     document.getElementById("dangerScreen")
-        .style.display = "none";
+    .style.display="none";
 
     document.getElementById("jumpscare")
-        .style.display = "flex";
+    .style.display="flex";
 
     scarySound();
 
-    setTimeout(() => {
+    setTimeout(()=>{
 
         document.getElementById("jumpscare")
-            .style.display = "none";
+        .style.display="none";
 
         document.getElementById("troll")
-            .style.display = "flex";
+        .style.display="flex";
 
-    }, 4000);
+    },4000);
 }
 
 </script>
