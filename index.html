@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Analyse de sécurité</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        background: #000;
+        color: #00ff41;
+        font-family: Consolas, monospace;
+        overflow: hidden;
+    }
+
+    #terminal {
+        padding: 30px;
+        height: 100vh;
+        font-size: 18px;
+    }
+
+    .red {
+        color: red;
+    }
+
+    .warning {
+        color: yellow;
+    }
+
+    #progressContainer {
+        width: 100%;
+        height: 30px;
+        border: 2px solid #00ff41;
+        margin-top: 20px;
+    }
+
+    #progressBar {
+        width: 0%;
+        height: 100%;
+        background: #00ff41;
+        transition: width 0.4s;
+    }
+
+    #fakePopup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #111;
+        border: 3px solid red;
+        padding: 30px;
+        width: 500px;
+        max-width: 90%;
+        text-align: center;
+        box-shadow: 0 0 30px red;
+        z-index: 10;
+    }
+
+    button {
+        background: red;
+        color: white;
+        border: none;
+        padding: 15px 25px;
+        font-size: 18px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+
+    #trolled {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: black;
+        color: white;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+        z-index: 100;
+        font-family: Arial, sans-serif;
+    }
+
+    #trolled h1 {
+        font-size: clamp(50px, 10vw, 120px);
+        margin: 0;
+        animation: shake 0.4s infinite;
+    }
+
+    #trolled p {
+        font-size: 30px;
+    }
+
+    @keyframes shake {
+        0% { transform: translate(0, 0); }
+        25% { transform: translate(5px, -5px); }
+        50% { transform: translate(-5px, 5px); }
+        75% { transform: translate(5px, 5px); }
+        100% { transform: translate(-5px, -5px); }
+    }
+</style>
+</head>
+
+<body>
+
+<div id="terminal">
+    <h2>🛡️ ANALYSE DE SÉCURITÉ EN COURS...</h2>
+
+    <p id="status">Initialisation du système...</p>
+
+    <div id="progressContainer">
+        <div id="progressBar"></div>
+    </div>
+
+    <p id="percent">0%</p>
+
+    <div id="logs"></div>
+</div>
+
+
+<div id="fakePopup">
+    <h2 class="red">⚠ ALERTE CRITIQUE ⚠</h2>
+
+    <p>
+        Une activité suspecte a été détectée...
+    </p>
+
+    <p class="warning">
+        47 menaces détectées !
+    </p>
+
+    <button onclick="showTrolled()">
+        DÉSINFECTER
+    </button>
+</div>
+
+
+<div id="trolled">
+    <h1>😂 T'AS ÉTÉ TROLLÉ 😂</h1>
+    <p>Aucun virus. Ton PC va bien 😎</p>
+
+    <button onclick="location.reload()">
+        RECOMMENCER
+    </button>
+</div>
+
+
+<script>
+
+let progress = 0;
+
+const progressBar = document.getElementById("progressBar");
+const percent = document.getElementById("percent");
+const status = document.getElementById("status");
+const logs = document.getElementById("logs");
+
+const fakeFiles = [
+    "Analyse de C:/System...",
+    "Recherche des fichiers suspects...",
+    "Vérification des processus...",
+    "Analyse des données système...",
+    "Détection d'activité inhabituelle...",
+    "Scan des fichiers temporaires...",
+    "Analyse terminée..."
+];
+
+function addLog(text, color = "") {
+    const line = document.createElement("p");
+
+    line.textContent = "> " + text;
+
+    if (color) {
+        line.className = color;
+    }
+
+    logs.appendChild(line);
+}
+
+const scan = setInterval(() => {
+
+    progress += Math.floor(Math.random() * 8) + 3;
+
+    if (progress > 100) {
+        progress = 100;
+    }
+
+    progressBar.style.width = progress + "%";
+    percent.textContent = progress + "%";
+
+    const randomText =
+        fakeFiles[Math.floor(Math.random() * fakeFiles.length)];
+
+    addLog(randomText);
+
+    if (progress >= 30 && progress < 60) {
+        status.textContent = "Analyse approfondie...";
+    }
+
+    if (progress >= 60 && progress < 90) {
+        status.innerHTML =
+            "<span class='warning'>Des anomalies ont été détectées...</span>";
+    }
+
+    if (progress >= 90) {
+        status.innerHTML =
+            "<span class='red'>⚠ MENACE CRITIQUE DÉTECTÉE ⚠</span>";
+    }
+
+    if (progress === 100) {
+
+        clearInterval(scan);
+
+        addLog("47 MENACES DÉTECTÉES !", "red");
+
+        setTimeout(() => {
+            document.getElementById("fakePopup").style.display = "block";
+        }, 1000);
+    }
+
+}, 700);
+
+
+function showTrolled() {
+
+    document.getElementById("fakePopup").style.display = "none";
+
+    document.getElementById("trolled").style.display = "flex";
+
+}
+
+</script>
+
+</body>
+</html>
