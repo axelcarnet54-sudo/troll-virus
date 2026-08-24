@@ -413,7 +413,7 @@ const scan=setInterval(()=>{
         threats.textContent="13";
 
         addLog(
-            "⚠ 13 MENACES CRITIQUES DÉTECTÉES",
+            "⚠ 13 MENACES CRITIQUES DÉTECTÉES QUI ENCULENT TON PC",
             "danger"
         );
 
