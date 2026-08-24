@@ -1,1 +1,506 @@
-# troll-virus
+# troll-virus<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Security Scan</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #050505;
+    color: #00ff66;
+    font-family: Consolas, "Courier New", monospace;
+    overflow: hidden;
+}
+
+#scanScreen {
+    min-height: 100vh;
+    padding: 25px;
+}
+
+.header {
+    border-bottom: 1px solid #00ff66;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.small {
+    color: #777;
+    font-size: 13px;
+}
+
+.progressBox {
+    width: 100%;
+    height: 28px;
+    border: 1px solid #00ff66;
+    margin: 20px 0 10px;
+}
+
+#progress {
+    width: 0%;
+    height: 100%;
+    background: #00ff66;
+    box-shadow: 0 0 12px #00ff66;
+    transition: width .25s;
+}
+
+#percent {
+    font-size: 20px;
+}
+
+.stats {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+.stat {
+    border: 1px solid #222;
+    padding: 12px 18px;
+    min-width: 150px;
+    background: #080808;
+}
+
+.stat span {
+    display: block;
+    color: white;
+    font-size: 22px;
+    margin-top: 5px;
+}
+
+#log {
+    height: 45vh;
+    overflow: hidden;
+    border: 1px solid #222;
+    padding: 15px;
+    background: #020202;
+}
+
+.line {
+    margin: 5px 0;
+}
+
+.good {
+    color: #00ff66;
+}
+
+.warning {
+    color: #ffd000;
+}
+
+.danger {
+    color: #ff3030;
+}
+
+#dangerScreen {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #050000;
+    color: red;
+    z-index: 20;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+#dangerScreen h1 {
+    font-size: clamp(40px, 8vw, 90px);
+    margin: 0;
+    animation: shake .15s infinite;
+}
+
+#dangerScreen p {
+    font-size: 22px;
+}
+
+button {
+    padding: 15px 30px;
+    border: 0;
+    background: red;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+#jumpscare {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 50;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.face {
+    font-size: min(35vw, 280px);
+    animation: pulse .5s infinite alternate;
+}
+
+#jumpscare h1 {
+    font-size: clamp(35px, 7vw, 80px);
+    margin: 10px;
+}
+
+#troll {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 100;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+#troll h1 {
+    font-size: clamp(45px, 9vw, 110px);
+    margin: 0;
+}
+
+#troll p {
+    font-size: 25px;
+}
+
+@keyframes shake {
+    0% { transform: translate(2px, 1px); }
+    50% { transform: translate(-3px, -2px); }
+    100% { transform: translate(2px, -1px); }
+}
+
+@keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.08); }
+}
+</style>
+</head>
+
+<body>
+
+<div id="scanScreen">
+
+    <div class="header">
+        <h1>🛡 SYSTEM SECURITY CENTER</h1>
+        <div class="small">
+            Advanced Threat Detection Engine v4.7.2
+        </div>
+    </div>
+
+    <div>
+        Analyse approfondie du système...
+    </div>
+
+    <div class="progressBox">
+        <div id="progress"></div>
+    </div>
+
+    <div id="percent">0%</div>
+
+    <div class="stats">
+
+        <div class="stat">
+            Fichiers analysés
+            <span id="files">0</span>
+        </div>
+
+        <div class="stat">
+            Processus
+            <span id="processes">0</span>
+        </div>
+
+        <div class="stat">
+            Menaces
+            <span id="threats">0</span>
+        </div>
+
+        <div class="stat">
+            Niveau
+            <span id="level">NORMAL</span>
+        </div>
+
+    </div>
+
+    <div id="log"></div>
+
+</div>
+
+
+<div id="dangerScreen">
+
+    <h1>⚠ MENACE CRITIQUE ⚠</h1>
+
+    <p id="dangerText">
+        Une anomalie grave a été détectée.
+    </p>
+
+    <p>
+        Intervention automatique dans <b id="countdown">10</b> secondes...
+    </p>
+
+    <button onclick="startEnding()">
+        ANNULER
+    </button>
+
+</div>
+
+
+<audio id="scarySound" src="jusatti890-scream-horror-sfx-490899.mp3" preload="auto"></audio>
+
+<div id="jumpscare">
+
+    <img src="horreur.jpg.jpg" alt="">
+
+    <h1>ACCÈS COMPROMIS</h1>
+
+    <p>Analyse de sécurité terminée.</p>
+
+</div>
+
+
+<div id="troll">
+
+    <h1>😂 T'AS ÉTÉ TROLLÉ 😂</h1>
+
+    <p>
+        Aucun virus n'a été installé.<br>
+        Ton ordinateur n'a rien du tout 😎
+    </p>
+
+    <button onclick="location.reload()">
+        RECOMMENCER
+    </button>
+
+</div>
+
+
+<script>
+
+const progressBar = document.getElementById("progress");
+const percent = document.getElementById("percent");
+const files = document.getElementById("files");
+const processes = document.getElementById("processes");
+const threats = document.getElementById("threats");
+const level = document.getElementById("level");
+const log = document.getElementById("log");
+
+let progress = 0;
+let fileCount = 0;
+let processCount = 0;
+let threatCount = 0;
+
+const fakeFiles = [
+    "C:/System/Core/kernel.dat",
+    "C:/Windows/System32/security.dll",
+    "C:/Users/Public/Cache/index.tmp",
+    "C:/ProgramData/System/update.dat",
+    "C:/System/Drivers/network.sys",
+    "C:/Users/Public/AppData/cache.bin",
+    "C:/Windows/Temp/system_cache.tmp",
+    "C:/Program Files/Common/system.dll",
+    "C:/System/Logs/security.log",
+    "C:/Users/Public/Documents/data.tmp",
+    "C:/Windows/System32/config.dat",
+    "C:/ProgramData/Services/service.tmp"
+];
+
+const messages = [
+    "Initialisation du moteur d'analyse...",
+    "Vérification des fichiers système...",
+    "Analyse des processus actifs...",
+    "Analyse des fichiers temporaires...",
+    "Recherche de comportements suspects...",
+    "Vérification des connexions locales...",
+    "Analyse heuristique...",
+    "Vérification de l'intégrité du système..."
+];
+
+function addLog(text, type = "good") {
+
+    const line = document.createElement("div");
+
+    line.className = "line " + type;
+
+    line.textContent = "> " + text;
+
+    log.appendChild(line);
+
+    while (log.children.length > 16) {
+        log.removeChild(log.firstChild);
+    }
+}
+
+function randomFile() {
+    return fakeFiles[
+        Math.floor(Math.random() * fakeFiles.length)
+    ];
+}
+
+const scan = setInterval(() => {
+
+    progress += Math.floor(Math.random() * 4) + 2;
+
+    if (progress > 100)
+        progress = 100;
+
+    progressBar.style.width = progress + "%";
+    percent.textContent = progress + "%";
+
+    fileCount += Math.floor(Math.random() * 450) + 150;
+    processCount += Math.floor(Math.random() * 4) + 1;
+
+    files.textContent = fileCount.toLocaleString();
+    processes.textContent = processCount;
+
+    addLog(
+        messages[Math.floor(Math.random() * messages.length)]
+    );
+
+    addLog(
+        "Analyse : " + randomFile()
+    );
+
+    /*
+       Fausses détections uniquement visuelles.
+    */
+
+    if (progress > 35 && threatCount === 0) {
+
+        threatCount = 1;
+
+        threats.textContent = threatCount;
+
+        addLog(
+            "Anomalie comportementale détectée",
+            "warning"
+        );
+
+        level.textContent = "ATTENTION";
+    }
+
+    if (progress > 55 && threatCount === 1) {
+
+        threatCount = 3;
+
+        threats.textContent = threatCount;
+
+        addLog(
+            "Signature inconnue détectée",
+            "warning"
+        );
+
+        level.textContent = "ÉLEVÉ";
+    }
+
+    if (progress > 72 && threatCount === 3) {
+
+        threatCount = 7;
+
+        threats.textContent = threatCount;
+
+        addLog(
+            "⚠ Plusieurs anomalies critiques",
+            "danger"
+        );
+
+        level.textContent = "CRITIQUE";
+    }
+
+    if (progress > 88) {
+
+        addLog(
+            "Analyse mémoire approfondie...",
+            "warning"
+        );
+
+    }
+
+    if (progress >= 100) {
+
+        clearInterval(scan);
+
+        threats.textContent = "13";
+
+        addLog(
+            "⚠ 13 MENACES CRITIQUES DÉTECTÉES",
+            "danger"
+        );
+
+        setTimeout(() => {
+
+            document.getElementById("dangerScreen")
+                .style.display = "flex";
+
+            startCountdown();
+
+        }, 1500);
+    }
+
+}, 500);
+
+
+function startCountdown() {
+
+    let seconds = 10;
+
+    const counter =
+        document.getElementById("countdown");
+
+    const timer = setInterval(() => {
+
+        seconds--;
+
+        counter.textContent = seconds;
+
+        if (seconds <= 0) {
+
+            clearInterval(timer);
+
+            startEnding();
+        }
+
+    }, 1000);
+}
+
+
+function startEnding() {
+document.getElementById("scarySound").play();
+    document.getElementById("dangerScreen")
+        .style.display = "none";
+
+    document.getElementById("jumpscare")
+        .style.display = "flex";
+
+    setTimeout(() => {
+
+        document.getElementById("jumpscare")
+            .style.display = "none";
+
+        document.getElementById("troll")
+            .style.display = "flex";
+
+    }, 4000);
+}
+
+</script>
+
+</body>
+</html>
